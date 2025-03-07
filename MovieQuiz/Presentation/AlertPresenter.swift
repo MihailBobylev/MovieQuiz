@@ -8,9 +8,7 @@
 import UIKit
 
 final class AlertPresenter {
-    weak var movieQuizViewController: MovieQuizViewController?
-    
-    func showResult(alertModel: AlertModel) {
+    static func showResult(in viewController: UIViewController, alertModel: AlertModel) {
         let alert = UIAlertController(
             title: alertModel.title,
             message: alertModel.message,
@@ -21,6 +19,6 @@ final class AlertPresenter {
         }
         
         alert.addAction(action)
-        movieQuizViewController?.present(alert, animated: true, completion: nil)
+        viewController.present(alert, animated: true, completion: nil)
     }
 }
