@@ -31,6 +31,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - QuestionFactoryDelegate
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        hideLoadingIndicator()
         guard let question else {
             return
         }
@@ -44,7 +45,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
         questionFactory?.requestNextQuestion()
     }
 
@@ -123,6 +123,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         } else {
             currentQuestionIndex += 1
             
+            showLoadingIndicator()
             questionFactory?.requestNextQuestion()
         }
     }
@@ -137,6 +138,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             currentQuestionIndex = 0
             correctAnswers = 0
             
+            showLoadingIndicator()
             questionFactory?.requestNextQuestion()
         }
         AlertPresenter.showResult(in: self, alertModel: alertModel)
@@ -148,7 +150,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let alertModel = AlertModel(title: "Ошибка",
                                     message: message,
                                     buttonText: "Попробовать еще раз") { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             currentQuestionIndex = 0
             correctAnswers = 0
             
@@ -159,12 +161,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     
     private func hideLoadingIndicator() {
-        activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
     }
 }
