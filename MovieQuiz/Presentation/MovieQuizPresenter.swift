@@ -26,8 +26,12 @@ final class MovieQuizPresenter {
         viewController.showLoadingIndicator()
     }
     
-    func isLastQuestion() -> Bool {
-        currentQuestionIndex == questionsAmount - 1
+    func convert(model: QuizQuestion) -> QuizStepViewModel {
+        let questionStep = QuizStepViewModel(
+            image: UIImage(data: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
+        return questionStep
     }
     
     func restartGame() {
@@ -76,14 +80,6 @@ extension MovieQuizPresenter: QuestionFactoryDelegate {
 }
 
 private extension MovieQuizPresenter {
-    func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
-    }
-    
     func didAnswer(isCorrectAnswer: Bool) {
         if isCorrectAnswer {
             correctAnswers += 1
@@ -130,5 +126,9 @@ private extension MovieQuizPresenter {
             viewController?.showLoadingIndicator()
             questionFactory?.requestNextQuestion()
         }
+    }
+    
+    func isLastQuestion() -> Bool {
+        currentQuestionIndex == questionsAmount - 1
     }
 }
